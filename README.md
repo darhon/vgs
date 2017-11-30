@@ -1,2 +1,2 @@
 # vgs
-Test task for VSG
+Test task for VGS
