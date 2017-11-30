@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+
+  tomcat:
+    image: tomcat:7-jre8-alpine
+    ports:
+      - 8080:8080
+    networks:
+      - application
+    deploy:
+      replicas: 1
+    restart_policy:
+      condition: on-failure
+
+networks:
+  application:
