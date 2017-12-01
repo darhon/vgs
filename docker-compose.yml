@@ -1,17 +1,59 @@
-version: "3"
+version: "3.3"
 
 services:
 
-  tomcat:
+  tomcat_app:
     image: tomcat:7-jre8-alpine
+    container_name: tomcat_app
     ports:
       - 8080:8080
     networks:
       - application
-    deploy:
-      replicas: 1
-    restart_policy:
-      condition: on-failure
+    restart: always
+    volumes:
+      - logs:/usr/local/tomcat/logs:z
+
+  log_agent:
+    image: fluent/fluentd:stable
+    container_name: log_agent
+    networks:
+      - application
+    restart: always
+    expose:
+      - 8888
+    volumes:
+      - logs:/logs:z
+      - ./fluent_agent.conf:/fluentd/etc/fluent.conf
+    links:
+      - log_forwarder1:log_forwarder1
+      - log_forwarder2:log_forwarder2
+
+  log_forwarder1:
+    image: fluent/fluentd:stable
+    container_name: log_forwarder1
+    hostname: forwarder1
+    networks:
+      - application
+    expose:
+      - 24224
+    restart: always
+    volumes:
+      - ./fluent_forwarder.conf:/fluentd/etc/fluent.conf
+
+  log_forwarder2:
+    image: fluent/fluentd:stable
+    container_name: log_forwarder2
+    hostname: forwarder2
+    networks:
+      - application
+    expose:
+      - 24224
+    restart: always
+    volumes:
+      - ./fluent_forwarder.conf:/fluentd/etc/fluent.conf
 
 networks:
   application:
+
+volumes:
+  logs:
