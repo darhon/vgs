@@ -53,10 +53,11 @@ This can be easily verified:
 ```
 # docker stop log_forwarder1
 ```
-* refresh web page in your browser.
-* check second terminal output. There may be a slight delay until the Log Agent switches to the second server.
+* refresh several times web page in your browser.
+* check second terminal output. There may be a slight delay (<30s) until the Log Agent switches to the second server.
 * start first Log Forwarder:
 ```
 # docker start log_forwarder1
 ```
+* refresh several times web page in your browser.
 * make sure that the data is sent back to the first Log Forwarder.
